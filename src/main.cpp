@@ -2,9 +2,10 @@
 #include <SD.h>
 
 #include "SensorData.hpp"
+#include "Sensors.hpp"
 
 void setup () {
-    test(0);
+
 }
 
 void loop () {

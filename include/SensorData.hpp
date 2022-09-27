@@ -15,13 +15,12 @@ class SensorData {
     public:
 
         // TODO: determine smallest width needed to hold data
-        // TODO: write doxygen comments that include the measurement units
 
-        int temperature;
-        int humidity;
-        int pressure;
-        int oxygen;
-        int uv;
+        int temperature; /*! \brief Celsius */
+        int humidity;    /*! \brief Relative humidity */
+        int pressure;    /*! \brief Pascals */
+        int oxygen;      /*! \brief Percent concentration */
+        int uv;          /*! \brief UV index */
 
         void begin ();
 

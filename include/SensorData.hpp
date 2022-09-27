@@ -17,11 +17,17 @@ class SensorData {
 
         // TODO: determine smallest width needed to hold data
 
-        int temperature; /*! \brief Celsius */
-        int humidity;    /*! \brief Relative humidity */
-        int pressure;    /*! \brief Pascals */
-        int oxygen;      /*! \brief Percent concentration */
-        int uv;          /*! \brief UV index */
+        /*! \brief Celsius */
+        int temperature;
+        /*! \brief Relative humidity */
+        int humidity;
+        /*! \brief Pascals */
+        int pressure;
+        /*! \brief Percent concentration */
+        int oxygen;
+        /*! \brief UV index */
+        int uv;
+        /*! \brief Quaternion */
         imu::Quaternion orientation;
 
         void begin ();

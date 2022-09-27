@@ -72,5 +72,10 @@ void SensorData::update () {
  * \param   file   The file to write the data into
  */
 void SensorData::write (SDFile file) {
-
+    /*!
+     * \warning Test whether the write function clears the file
+     * as it does in linux/macos. If it does insert a seek before
+     * the write
+     */
+    file.write((char *)this, sizeof(this));
 }

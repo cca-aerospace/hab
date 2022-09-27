@@ -37,4 +37,6 @@ class SensorData {
         void write (SDFile file);
 };
 
+extern SensorData data;
+
 #endif

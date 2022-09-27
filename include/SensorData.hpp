@@ -4,6 +4,7 @@
 #define __SENSOR_DATA_HPP_
 
 #include <SD.h>
+#include <utility/imumaths.h>
 
 /*!
  * \class SensorData
@@ -21,6 +22,7 @@ class SensorData {
         int pressure;    /*! \brief Pascals */
         int oxygen;      /*! \brief Percent concentration */
         int uv;          /*! \brief UV index */
+        imu::Quaternion orientation;
 
         void begin ();
 

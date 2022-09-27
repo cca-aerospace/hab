@@ -22,12 +22,20 @@ void SensorData::update () {
     // pull data from sensors
 
     // update temp, humidity, and pressure
+    temperature = sensorBME.readTemperature();
+    humidity = sensorBME.readHumidity();
+    pressure = sensorBME.readPressure();
 
     // update oxygen
+    oxygen = sensorOxygen.getOxygenData(5);
     
     // update uv
+    if (sensorUV.newDataAvailable()) {
+        uv = sensorUV.readUVS();
+    }
 
     // update orientation
+    orientation = sensorOrientation.getQuat();
 }
 
 /*!

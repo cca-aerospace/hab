@@ -1,3 +1,5 @@
+/*! \file SensorData.cpp */
+
 #include <Arduino.h>
 
 #include "SensorData.hpp"

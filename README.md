@@ -12,7 +12,6 @@
  - Live server vscode extension to serve documentation locally
     - install by searching `"Live Server"` in the vscode extensions tab
     - launch server by clicking `"Go Live"` in bottom righthand corner of the vscode window
- - Doxygen documentation generator
-    - tool to help create doxygen comments
+ - Doxygen documentation generator vscode extension to help create doxygen comments
     - install by searching `"Doxygen Documentation Generator"` in the vscode extensions tab
     - once installed go to the extension settings and modifing the `"First Line"` and `"Trigger Sequence"` variables from `"/**"` to `"/*!"`

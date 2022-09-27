@@ -1,5 +1,5 @@
-#ifndef __SENSOR_HPP_
-#define __SENSOR_HPP_
+#ifndef __SENSOR_DATA_HPP_
+#define __SENSOR_DATA_HPP_
 
 class SensorData {
     private:

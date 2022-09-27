@@ -13,6 +13,8 @@ class SensorData {
     public:
 
         // TODO: determine smallest width needed to hold data
+        // TODO: write doxygen comments that include the measurement units
+        
         int temperature;
         int humidity;
         int pressure;

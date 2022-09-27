@@ -1,3 +1,7 @@
+/*!
+ * \mainpage This documentation is probably unnecessary for this project.
+ */
+
 #include <Arduino.h>
 #include <SD.h>
 

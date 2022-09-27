@@ -3,10 +3,16 @@
 #include "SensorData.hpp"
 #include "Sensors.hpp"
 
+/*!
+ * \return none
+ */
 void SensorData::begin () {
 
 }
 
+/*!
+ * \return none
+ */
 void SensorData::update () {
     // pull data from sensors
 

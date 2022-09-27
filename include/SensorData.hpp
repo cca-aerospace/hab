@@ -1,6 +1,14 @@
+/*! \file SensorData.hpp
+ *
+ */
+
 #ifndef __SENSOR_DATA_HPP_
 #define __SENSOR_DATA_HPP_
 
+/*! \class SensorData
+ *  \brief Class to handle reading data from sensors
+ *
+ */
 class SensorData {
     private:
 

@@ -1,3 +1,5 @@
+/*! \file Sensors.hpp */
+
 #ifndef __SENSORS_HPP_
 #define __SENSORS_HPP_
 

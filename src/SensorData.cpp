@@ -4,14 +4,16 @@
 #include "Sensors.hpp"
 
 /*!
- * \return none
+ * \fn SensorData::begin
+ * \brief Performs any necessary initialization
  */
 void SensorData::begin () {
 
 }
 
 /*!
- * \return none
+ * \fn SensorData::update
+ * \brief Reads data from sensors
  */
 void SensorData::update () {
     // pull data from sensors

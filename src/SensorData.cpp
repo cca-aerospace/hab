@@ -1,6 +1,7 @@
 /*! \file SensorData.cpp */
 
 #include <Arduino.h>
+#include <SD.h>
 
 #include "SensorData.hpp"
 #include "Sensors.hpp"
@@ -27,4 +28,14 @@ void SensorData::update () {
     // update uv
 
     // update orientation
+}
+
+/*!
+ * \fn SensorData::write
+ * \brief Writes data to file on SD card
+ * 
+ * \param   file   The file to write the data into
+ */
+void SensorData::write (SDFile file) {
+
 }

@@ -3,6 +3,8 @@
 #ifndef __SENSOR_DATA_HPP_
 #define __SENSOR_DATA_HPP_
 
+#include <SD.h>
+
 /*!
  * \class SensorData
  * \brief Class to handle reading data from sensors
@@ -14,7 +16,7 @@ class SensorData {
 
         // TODO: determine smallest width needed to hold data
         // TODO: write doxygen comments that include the measurement units
-        
+
         int temperature;
         int humidity;
         int pressure;
@@ -24,6 +26,8 @@ class SensorData {
         void begin ();
 
         void update ();
+
+        void write (SDFile file);
 };
 
 #endif

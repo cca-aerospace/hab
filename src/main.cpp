@@ -8,6 +8,10 @@
 #include "SensorData.hpp"
 #include "Sensors.hpp"
 
+extern "C" {
+    uint8_t posit_from_float ();
+}
+
 SDFile file;
 const uint8_t SD_PIN = 4;
 
@@ -16,12 +20,12 @@ void setup () {
 
     data.begin();
 
-    while (!SD.begin(SD_PIN)) {
-        Serial.println(F("failed to initialize SD card"));
-    }
-    Serial.println(F("initialized SD card"));
+    //while (!SD.begin(SD_PIN)) {
+    //    Serial.println(F("failed to initialize SD card"));
+    //}
+    //Serial.println(F("initialized SD card"));
 
-    file = SD.open("data.txt", FILE_WRITE);
+    //file = SD.open("data.txt", FILE_WRITE);
 }
 
 const unsigned long dataReadDelay = 1000;
@@ -30,11 +34,15 @@ unsigned long current;
 unsigned long elapsed;
 
 void loop () {
+    posit_from_float();
     current = millis();
     elapsed = current - last;
     
     if (elapsed > dataReadDelay) {
         data.update();
-        data.write(file);
+        //data.write(file);
+        data.debug();
     }
+
+    last = current;
 }

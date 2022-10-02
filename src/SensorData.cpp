@@ -17,16 +17,19 @@ SensorData data;
 void SensorData::begin () {
     while (!sensorBME.begin()) {
         Serial.println(F("failed to initialize BME sensor"));
+        delay(1000);
     }
     Serial.println(F("initialized BME sensor"));
 
-    while (!sensorOxygen.begin()) {
+    while (!sensorOxygen.begin(ADDRESS_3)) {
         Serial.println(F("i2c device number error"));
+        delay(1000);
     }
     Serial.println(F("initialized Oxygen sensor"));
 
     while (!sensorUV.begin()) {
         Serial.println(F("failed to initialize UV sensor"));
+        delay(1000);
     }
     sensorUV.setMode(LTR390_MODE_UVS);
     sensorUV.setGain(LTR390_GAIN_3);
@@ -36,12 +39,13 @@ void SensorData::begin () {
     sensorUV.configInterrupt(false, LTR390_MODE_UVS);
     Serial.println(F("initialized UV sensor"));
 
-    while (!sensorOrientation.begin()) {
+    /*while (!sensorOrientation.begin()) {
         Serial.println(F("failed to initialize Orientation sensor"));
+        delay(1000);
     }
     delay(1000);
     sensorOrientation.setExtCrystalUse(true);
-    Serial.println(F("initialized Orientation sensor"));
+    Serial.println(F("initialized Orientation sensor"));*/
 }
 
 /*!
@@ -81,4 +85,17 @@ void SensorData::write (SDFile file) {
      * the write
      */
     file.write((char *)this, sizeof(this));
+}
+
+void SensorData::debug () {
+    Serial.print("temperature: ");
+    Serial.println(temperature);
+    Serial.print("humidity: ");
+    Serial.println(humidity);
+    Serial.print("pressure: ");
+    Serial.println(pressure);
+    Serial.print("UV: ");
+    Serial.println(uv);
+    Serial.print("oxygen: ");
+    Serial.println(oxygen);
 }

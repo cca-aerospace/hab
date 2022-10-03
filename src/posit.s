@@ -6,6 +6,9 @@
     .equ posit16_maxpos, 0x7FFF
     .equ posit16_minpos, 0x0001
 
+    .equ posit16_max, 0x7FFF
+    .equ posit16_min, 0x8001
+
     .equ posit16_useed_shift, 1 << 1
 
     .equ posit16_useed, 1 << posit16_useed_shift
@@ -48,12 +51,12 @@ posit16_from_float:
     bst     r25,     7
     bld     r18,     0
 
-    /* copy exponent into r25 */
-    bst     r24,     7
-    lsl     r25
-    bld     r25,     0
-
-    andi    r24,     0x7F
+    /* shift exponent into r25 */
+    /* shift fraction so it is aligned with the msb of r24 */
+    lsl     r22
+    rol     r23
+    rol     r24
+    rol     r25
 
     /* handle NaN and +/- infinity */
     cpi     r25,     0xFF
@@ -170,17 +173,17 @@ float_infinity:
     cp      r18,     r1
     breq    clamp_maxpos
 
-clamp_minpos:
+clamp_negative_infinity:
     /* when sign == 1 */
     /* -infinity */
-    ldi     r25,     hi8(posit16_minpos)
-    ldi     r24,     lo8(posit16_minpos)
+    ldi     r25,     hi8(posit16_min)
+    ldi     r24,     lo8(posit16_min)
     jmp     0b
 
-clamp_maxpos:
+clamp_positive_infinity:
     /* when sign == 0 */
     /* +infinity */
-    ldi     r25,     hi8(posit16_maxpos)
-    ldi     r24,     lo8(posit16_minpos)
+    ldi     r25,     hi8(posit16_max)
+    ldi     r24,     lo8(posit16_max)
     jmp     0b
 

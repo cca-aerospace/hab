@@ -8,10 +8,6 @@
 #include "SensorData.hpp"
 #include "Sensors.hpp"
 
-extern "C" {
-    uint8_t posit_from_float ();
-}
-
 SDFile file;
 const uint8_t SD_PIN = 4;
 
@@ -34,7 +30,6 @@ unsigned long current;
 unsigned long elapsed;
 
 void loop () {
-    posit_from_float();
     current = millis();
     elapsed = current - last;
     

@@ -8,6 +8,11 @@
 #include "SensorData.hpp"
 #include "Sensors.hpp"
 
+extern "C" {
+    uint16_t posit16_from_float (float f);
+    float float_from_posit16 (uint16_t p);
+}
+
 SDFile file;
 const uint8_t SD_PIN = 4;
 
@@ -37,7 +42,6 @@ void loop () {
         data.update();
         //data.write(file);
         data.debug();
+        last = current;
     }
-
-    last = current;
 }

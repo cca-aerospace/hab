@@ -39,13 +39,13 @@ void SensorData::begin () {
     sensorUV.configInterrupt(false, LTR390_MODE_UVS);
     Serial.println(F("initialized UV sensor"));
 
-    /*while (!sensorOrientation.begin()) {
+    while (!sensorOrientation.begin()) {
         Serial.println(F("failed to initialize Orientation sensor"));
         delay(1000);
     }
     delay(1000);
     sensorOrientation.setExtCrystalUse(true);
-    Serial.println(F("initialized Orientation sensor"));*/
+    Serial.println(F("initialized Orientation sensor"));
 }
 
 /*!

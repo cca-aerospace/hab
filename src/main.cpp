@@ -5,8 +5,6 @@
 #include <Arduino.h>
 #include <SD.h>
 
-#define __SENSOR_DEBUG__
-
 #include "SensorData.hpp"
 #include "Sensors.hpp"
 #include "TryInit.hpp"
@@ -24,7 +22,6 @@ void setup () {
 
     data.begin();
 
-    // stall while SD card is uninitialized
     TryInit(-1, SD, SD_PIN);
 
     file = SD.open("data.txt", FILE_WRITE);

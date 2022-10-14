@@ -6,6 +6,7 @@
 
 #include "SensorData.hpp"
 #include "Sensors.hpp"
+#include "TryInit.hpp"
 
 /*! \brief globally defined SensorData instance */
 SensorData data;
@@ -15,37 +16,20 @@ SensorData data;
  * \brief Performs any necessary initialization
  */
 void SensorData::begin () {
-    while (!sensorBME.begin()) {
-        Serial.println(F("failed to initialize BME sensor"));
-        delay(1000);
-    }
-    Serial.println(F("initialized BME sensor"));
+    TryInit(10, sensorBME);
 
-    while (!sensorOxygen.begin(ADDRESS_3)) {
-        Serial.println(F("i2c device number error"));
-        delay(1000);
-    }
-    Serial.println(F("initialized Oxygen sensor"));
+    TryInit(10, sensorOxygen, ADDRESS_3);
 
-    while (!sensorUV.begin()) {
-        Serial.println(F("failed to initialize UV sensor"));
-        delay(1000);
-    }
+    TryInit(10, sensorUV);
     sensorUV.setMode(LTR390_MODE_UVS);
     sensorUV.setGain(LTR390_GAIN_3);
     // lower the resolution if reading are taking too long
     sensorUV.setResolution(LTR390_RESOLUTION_16BIT);
     sensorUV.setThresholds(0, 0);
     sensorUV.configInterrupt(false, LTR390_MODE_UVS);
-    Serial.println(F("initialized UV sensor"));
 
-    while (!sensorOrientation.begin()) {
-        Serial.println(F("failed to initialize Orientation sensor"));
-        delay(1000);
-    }
-    delay(1000);
+    TryInit(10, sensorOrientation);
     sensorOrientation.setExtCrystalUse(true);
-    Serial.println(F("initialized Orientation sensor"));
 }
 
 /*!
@@ -78,24 +62,43 @@ void SensorData::update () {
  * 
  * \param   file   The file to write the data into
  */
-void SensorData::write (SDFile file) {
-    /*!
-     * \warning Test whether the write function clears the file
-     * as it does in linux/macos. If it does insert a seek before
-     * the write
-     */
-    file.write((char *)this, sizeof(this));
+void SensorData::write (SDFile file, unsigned long ms) {
+    int written = 0;
+
+    struct Data {
+        unsigned long ms;
+        float temperature;
+        float humidity;
+        float pressure;
+        float oxygen;
+        float uv;
+    };
+
+    struct Data * data = new Data;
+    data->ms = ms;
+    data->temperature = temperature;
+    data->humidity = humidity;
+    data->pressure = pressure;
+    data->oxygen = oxygen;
+    data->uv = uv;
+
+    written += file.write((char *)data, sizeof(struct Data));
+
+    Serial.print("bytes written: ");
+    Serial.println(written);
+
+    delete data;
 }
 
 void SensorData::debug () {
-    Serial.print("temperature: ");
+    Serial.print(F("temperature: "));
     Serial.println(temperature);
-    Serial.print("humidity: ");
+    Serial.print(F("humidity: "));
     Serial.println(humidity);
-    Serial.print("pressure: ");
+    Serial.print(F("pressure: "));
     Serial.println(pressure);
-    Serial.print("UV: ");
+    Serial.print(F("UV: "));
     Serial.println(uv);
-    Serial.print("oxygen: ");
+    Serial.print(F("oxygen: "));
     Serial.println(oxygen);
 }

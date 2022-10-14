@@ -18,15 +18,15 @@ class SensorData {
         // TODO: determine smallest width needed to hold data
 
         /*! \brief Celsius */
-        int temperature;
+        float temperature;
         /*! \brief Relative humidity */
-        int humidity;
+        float humidity;
         /*! \brief Pascals */
-        int pressure;
+        float pressure;
         /*! \brief Percent concentration */
-        int oxygen;
+        float oxygen;
         /*! \brief UV index */
-        int uv;
+        float uv;
         /*! \brief Quaternion */
         imu::Quaternion orientation;
 
@@ -34,7 +34,7 @@ class SensorData {
 
         void update ();
 
-        void write (SDFile file);
+        void write (SDFile file, unsigned long ms);
 
         void debug ();
 };

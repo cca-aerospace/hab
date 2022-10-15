@@ -4,11 +4,6 @@
 
     .include "src/config.s"
 
-    .global posit16_from_float
-    .global float_from_posit16
-    .global posit16_decode
-    .global posit16_from_triple
-
     .equ posit16_nar, 1 << 15
     .equ posit16_maxpos, 0x7FFF
     .equ posit16_minpos, 0x0001

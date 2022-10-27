@@ -2,7 +2,7 @@
 
     .include "src/posit/posit.s"
 
-    .global \ns\()_to_triple
+    .global \ns
 
 /*
  * requires checking for NaR and zero first
@@ -11,6 +11,7 @@
  * posit passed in r24:r25
  *
  * fraction is aligned to msb of r25
+ * leading one is not automatically appended
  *
  * | fraction | r24:r25 |
  * | scale    | r22     |
@@ -20,7 +21,7 @@
 /* let sign = r19 */
 /* let mask = r18 */
 /* let bitsleft = r17 */
-\ns\()_to_triple:
+\ns\():
     /* prolouge */
     push    r16
     push    r17
@@ -53,14 +54,14 @@
 
     ldi     r19,     posit16_useed_shift
 
-1:
+\ns\()_count_scale:
     subi    r17,     1
     eor     r25,     r18
     lsl     r24
     rol     r25
     brcs    2f
     add     r22,     r19
-    rjmp    1b
+    rjmp    \ns\()_count_scale
 
 2:
     bst     r18,     7
@@ -97,4 +98,4 @@
 
 .endm
 
-namespace posit16
+namespace posit16_to_triple

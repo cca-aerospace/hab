@@ -26,9 +26,15 @@
     tst     r24
     brne    \ns\()_to_float_handle_normal
 
-    tst     r25
-    breq    \ns\()_to_float_handle_zero
-    brmi    \ns\()_to_float_handle_nar
+    mov     r0,      r25
+    lsl     r0
+    brne    \ns\()_to_float_handle_normal
+    brcs    \ns\()_to_float_handle_nar
+
+\ns\()_to_float_handle_zero:
+    ldi      r23,     0
+    ldi      r22,     0
+    rjmp     0f
 
 \ns\()_to_float_handle_normal:
     call    \ns\()_to_triple
@@ -57,11 +63,6 @@
     pop     r16
     /* epilouge */
     ret
-
-\ns\()_to_float_handle_zero:
-    ldi      r23,     0
-    ldi      r22,     0
-    rjmp     0b
 
 \ns\()_to_float_handle_nar:
     ldi      r25,     float_nan3

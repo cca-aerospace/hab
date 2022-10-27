@@ -6,7 +6,7 @@
 
 /* builds 16 bit posit from (sign, scale, fraction)
  *
- * fraction in r24:r25
+ * fraction in r24:r25 (without leading one)
  * scale in r22
  * sign in r20
  *
@@ -32,10 +32,10 @@
     ldi     r16,     15
     mov     r13,     r16
 
-    /* copy sign bit into r24 (start building posit) */
-    mov     r24,     r20
+    /* zero r24 (start building posit) */
+    clr     r24
 
-    ldi     r20,     posit16_useed_shift
+    ldi     r16,     posit16_useed_shift
 
     ldi     r17,     0
     clr     r0
@@ -46,10 +46,10 @@
     eor     r22,     r17
     add     r22,     r0
 
-    /* zero r20 if scale is negative */
+    /* zero r16 if scale is negative */
     com     r17
-    and     r20,     r17
-    add     r20,     r0
+    and     r16,     r17
+    add     r16,     r0
 
     mov     r21,     r0
     eor     r21,     r15
@@ -62,7 +62,7 @@
     sub     r13,     r21
 
     /* skip loop if exponent is less than klim */
-    cp      r22,     r20
+    cp      r22,     r16
     brlt    \ns\()_from_triple_build_regime
 
 \ns\()_from_triple_count_regime:
@@ -71,7 +71,7 @@
     breq    \ns\()_from_triple_build_regime
     subi    r22,     posit16_useed_shift
     /* continue loop while exponent is greater than or equal to klim */
-    cp      r22,     r20
+    cp      r22,     r16
     brge    \ns\()_from_triple_count_regime
 
 \ns\()_from_triple_build_regime:
@@ -82,7 +82,7 @@
     brne    \ns\()_from_triple_build_regime
 
     tst     r13
-    breq    0f
+    breq    \ns\()_from_triple_sign
 
 \ns\()_from_triple_end_regime:
     eor     r21,     r15
@@ -90,8 +90,8 @@
     rol     r25
     or      r24,     r21
 
-    sub    r13,      r15
-    breq    0f
+    sub     r13,     r15
+    breq    \ns\()_from_triple_sign
 
     /* load exponent from T */
     lsl     r24
@@ -99,7 +99,7 @@
     bld     r24,     0
     
     sub     r13,     r15
-    breq    0f
+    breq    \ns\()_from_triple_sign
 
     /* calculate fraction */
 \ns\()_from_triple_build_fraction:
@@ -111,6 +111,14 @@
 
     sub     r13,     r15
     brne    \ns\()_from_triple_build_fraction
+
+\ns\()_from_triple_sign:
+    clr     r0
+    sub     r0,      r20
+    eor     r24,     r0
+    eor     r25,     r0
+    add     r24,     r20
+    adc     r25,     r1
 
     /* epilouge */
 0:

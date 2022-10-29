@@ -1,9 +1,10 @@
 /*! \file SensorData.cpp */
 
+#include <Adafruit_LTR390.h>
 #include <Arduino.h>
 #include <SD.h>
-#include <Adafruit_LTR390.h>
 
+#include "Debug.hpp"
 #include "SensorData.hpp"
 #include "Sensors.hpp"
 #include "TryInit.hpp"
@@ -15,7 +16,7 @@ SensorData data;
  * \fn SensorData::begin
  * \brief Performs any necessary initialization
  */
-void SensorData::begin () {
+void SensorData::begin() {
     TryInit(10, sensorBME);
 
     TryInit(10, sensorOxygen, ADDRESS_3);
@@ -36,7 +37,7 @@ void SensorData::begin () {
  * \fn SensorData::update
  * \brief Reads data from sensors
  */
-void SensorData::update () {
+void SensorData::update() {
     // pull data from sensors
 
     // update temp, humidity, and pressure
@@ -46,11 +47,13 @@ void SensorData::update () {
 
     // update oxygen
     oxygen = sensorOxygen.getOxygenData(5);
-    
+
     // update uv
     if (sensorUV.newDataAvailable()) {
         uv = sensorUV.readUVS();
     }
+
+    accel = sensorOrientation.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
 
     // update orientation
     orientation = sensorOrientation.getQuat();
@@ -59,12 +62,10 @@ void SensorData::update () {
 /*!
  * \fn SensorData::write
  * \brief Writes data to file on SD card
- * 
+ *
  * \param   file   The file to write the data into
  */
-void SensorData::write (SDFile file, unsigned long ms) {
-    int written = 0;
-
+void SensorData::write(unsigned long ms) {
     struct Data {
         unsigned long ms;
         float temperature;
@@ -72,33 +73,51 @@ void SensorData::write (SDFile file, unsigned long ms) {
         float pressure;
         float oxygen;
         float uv;
+        float qx;
+        float qy;
+        float qz;
+        float qw;
+        float accelx;
+        float accely;
+        float accelz;
     };
 
-    struct Data * data = new Data;
-    data->ms = ms;
-    data->temperature = temperature;
-    data->humidity = humidity;
-    data->pressure = pressure;
-    data->oxygen = oxygen;
-    data->uv = uv;
+    struct Data data;
+    data.ms = ms;
+    data.temperature = temperature;
+    data.humidity = humidity;
+    data.pressure = pressure;
+    data.oxygen = oxygen;
+    data.uv = uv;
+    // unpack the structures to guarantee the order of elements
+    // TODO: is this really necessary?
+    data.qx = orientation.x();
+    data.qy = orientation.y();
+    data.qz = orientation.z();
+    data.qw = orientation.w();
+    data.accelx = accel.x();
+    data.accely = accel.y();
+    data.accelz = accel.z();
 
-    written += file.write((char *)data, sizeof(struct Data));
+    int written = primary.write((uint8_t *)&data, sizeof(struct Data));
 
-    Serial.print("bytes written: ");
-    Serial.println(written);
-
-    delete data;
+    // perform fallback strategy
+    if (written != sizeof(struct Data)) {
+        Println(F("FAIL"));
+    } else {
+        Println(F("SUCCESS"));
+    }
 }
 
-void SensorData::debug () {
-    Serial.print(F("temperature: "));
-    Serial.println(temperature);
-    Serial.print(F("humidity: "));
-    Serial.println(humidity);
-    Serial.print(F("pressure: "));
-    Serial.println(pressure);
-    Serial.print(F("UV: "));
-    Serial.println(uv);
-    Serial.print(F("oxygen: "));
-    Serial.println(oxygen);
+void SensorData::debug() {
+    Print(F("temperature: "));
+    Println(temperature);
+    Print(F("humidity: "));
+    Println(humidity);
+    Print(F("pressure: "));
+    Println(pressure);
+    Print(F("UV: "));
+    Println(uv);
+    Print(F("oxygen: "));
+    Println(oxygen);
 }

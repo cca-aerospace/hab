@@ -11,32 +11,37 @@
  * \brief Class to handle reading data from sensors
  */
 class SensorData {
-    private:
+private:
+public:
+    SDFile primary;
+    SDFile secondary;
 
-    public:
+    // TODO: determine smallest width needed to hold data
 
-        // TODO: determine smallest width needed to hold data
+    /*! \brief Celsius */
+    float temperature;
+    /*! \brief Relative humidity */
+    float humidity;
+    /*! \brief Pascals */
+    float pressure;
+    /*! \brief Percent concentration */
+    float oxygen;
+    /*! \brief UV index */
+    float uv;
+    /*! \brief Quaternion */
+    imu::Quaternion orientation;
 
-        /*! \brief Celsius */
-        float temperature;
-        /*! \brief Relative humidity */
-        float humidity;
-        /*! \brief Pascals */
-        float pressure;
-        /*! \brief Percent concentration */
-        float oxygen;
-        /*! \brief UV index */
-        float uv;
-        /*! \brief Quaternion */
-        imu::Quaternion orientation;
+    imu::Vector<3> accel;
 
-        void begin ();
+    void begin();
 
-        void update ();
+    void update();
 
-        void write (SDFile file, unsigned long ms);
+    void write(unsigned long ms);
 
-        void debug ();
+    void fallback(unsigned long ms);
+
+    void debug();
 };
 
 extern SensorData data;

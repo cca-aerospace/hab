@@ -1,5 +1,4 @@
 /*! \file Sensors.cpp */
-
 #include "Sensors.hpp"
 
 /*! \brief Sensor to check orientation */

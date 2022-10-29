@@ -3,10 +3,10 @@
 #ifndef __SENSORS_HPP_
 #define __SENSORS_HPP_
 
+#include <Adafruit_BME280.h>
 #include <Adafruit_BNO055.h>
 #include <Adafruit_LTR390.h>
 #include <DFRobot_OxygenSensor.h>
-#include <Adafruit_BME280.h>
 
 extern Adafruit_BNO055 sensorOrientation;
 

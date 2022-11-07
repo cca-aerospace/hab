@@ -1,27 +1,30 @@
 import pandas as pd
 
-class Table:
-    def __init__ (self, xdata: list, ydata: list):
-        self.df = pd.DataFrame(data = {
-            "x": xdata,
-            "y": ydata,
-        })
+class Table(pd.DataFrame):
+    def __init__ (self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    def __repr__ (self):
-        return repr(self.df)
+    def from_rows(rows):
+        return Table(rows)
 
-    def __str__ (self):
-        return repr(self)
+    def from_columns(names, *args):
+        data = dict()
+        for i in range(len(names)):
+            data[names[i]] = args[i]
+        return Table(data)
 
     def integrate (self):
-        new_ydata = [0]
-        running_sum = 0
-        xdata = self.df.x.values
-        ydata = self.df.y.values
+        old_columns = list(map(lambda c: list(c[1].values), self.items()))[1:]
+        keys = self.columns
+        xdata = self.iloc[:, 0].values
+
+        new_columns = [[0] for _ in range(len(old_columns))]
 
         for step in range(len(xdata) - 1):
             deltax = xdata[step + 1] - xdata[step]
-            running_sum += (ydata[step + 1] + ydata[step]) * deltax / 2
-            new_ydata.append(running_sum)
-        
-        return Table(self.df.x.values, new_ydata)
+            for i in range(len(old_columns)):
+                old_column = old_columns[i]
+                new_column = new_columns[i]
+                new_column.append(new_column[-1] + (old_column[step + 1] + old_column[step]) * deltax / 2)
+
+        return Table.from_columns(keys, xdata, *new_columns)

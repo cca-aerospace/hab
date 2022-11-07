@@ -3,6 +3,8 @@
 import struct
 import sys
 import argparse
+import pandas as pd
+from integrate import Table
 
 fields = [
     ("ms", "i"),
@@ -27,7 +29,7 @@ def unpack (data, fields):
     d = {}
     for i in range(len(fields)):
         field = fields[i]
-        d[field[0]] = struct.unpack(field[1], data[i*4:i*4+4])
+        d[field[0]] = struct.unpack(field[1], data[i*4:i*4+4])[0]
 
     return d
 
@@ -51,20 +53,16 @@ except Exception as e:
     print(f"error: {e}")
     exit(-1)
 
-try:
-    output_cvs = open(args.output_csv, "w+")
-except Exception as e:
-    print(f"error: {e}")
-    exit(-1)
-
 data = []
 
 for i in range(len(raw) // sizeof(fields)):
     data.append(unpack(raw, fields))
     raw = raw[sizeof(fields):]
 
-column_names = ",".join([field[0] for field in fields])
-column_values = [",".join([str(n[0]) for n in datum.values()]) for datum in data]
-all = "\n".join([column_names] + column_values)
-output_cvs.write(all)
-output_cvs.close()
+distance = Table(
+    map(lambda e: (e["ms"] / 1000, e["accelx"], e["accely"], e["accelz"]), data),
+    columns = ["seconds", "dispx", "dispy", "dispz"]
+).integrate().integrate()
+
+all = distance.join(pd.DataFrame(map(lambda e: list(e.values()), data), columns = data[0].keys()).drop("ms", axis=1))
+all.to_csv(path_or_buf=args.output_csv)

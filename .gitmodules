@@ -1,3 +1,6 @@
 [submodule "bad-wiring"]
 	path = bad-wiring
 	url = server:/bad-wiring
+[submodule "suicidal-payload"]
+	path = suicidal-payload
+	url = server:/suicidal-payload

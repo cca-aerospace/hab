@@ -1,0 +1,5 @@
+name: hab-data
+dependencies:
+  - pandas
+  - dash
+  - plotly

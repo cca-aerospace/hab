@@ -1,0 +1,17 @@
+# platformio
+.pio
+
+# vscode
+.vscode
+
+# macos
+**/*.DS_Store
+
+# doxygen
+doc
+
+# python
+data/__pycache__
+
+# data files
+**/*.dat

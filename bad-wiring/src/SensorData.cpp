@@ -36,26 +36,46 @@ void SensorData::begin() {
     failed = true;
 }
 
+template<typename T>
+void expand(T arg) {
+    Print(arg);
+}
+
+template<typename T, typename ...Args>
+void expand(T arg, Args ...args) {
+    Print(arg);
+    expand(args...);
+}
+
+template<typename ...Args>
+void log(Args ...args) {
+    expand(args...);
+    Print("\n");
+}
+
 /*!
  * \fn SensorData::update
  * \brief Reads data from sensors
  */
 void SensorData::update() {
     // pull data from sensors
+    log(F("=[ DATA LOG ]="));
 
     // update temp, humidity, and pressure
     temperature = sensorBME.readTemperature();
     humidity = sensorBME.readHumidity();
     altitude = sensorBME.readAltitude(1013.25);
 
-    // Print(F("temp: ")); Println(temperature);
+    log(F("temp: "), temperature);
+    log(F("humidity: "), humidity);
+    log(F("altitude: "), altitude);
 
     // update oxygen
     oxygen = sensorOxygen.getOxygenData(5);
+    log(F("oxygen: "), oxygen);
 
     uv = sensorUV.readUVS();
-
-    // Print(F("uv: ")); Println(uv);
+    log(F("ultra violet: "), uv);
 
     // update orientation
     auto orientation =
@@ -63,6 +83,7 @@ void SensorData::update() {
     eulerx = orientation.x();
     eulery = orientation.y();
     eulerz = orientation.z();
+    log(F("eulerx: "), eulerx, F(", eulery: "), eulery, F(", eulerz: "), eulerz);
 
     // update acceleration
     auto accel =
@@ -70,6 +91,7 @@ void SensorData::update() {
     accelx = accel.x();
     accely = accel.y() + 0.275;
     accelz = accel.z() + 0.3475;
+    log(F("accelx: "), accelx, F(", accely: "), accely, F(", accelz: "), accelz);
 
     voltage = analogRead(A0);
 }
@@ -133,6 +155,6 @@ bool SensorData::_write(uint8_t pin) {
         }
     }
 
-    Println(written);
+    log(F("bytes written: "), written);
     return failed;
 }

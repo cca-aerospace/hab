@@ -23,10 +23,10 @@ void setup() {
     data.begin();
 }
 
-const time_t dataReadDelay = 1000 - 1;
+const time_t dataReadDelay = seconds(1);
 
 #ifdef MODE_DEBUG
-const time_t shutdownTime = minutes(1);
+const time_t shutdownTime = minutes(5);
 #else
 const time_t shutdownTime = hours(24);
 #endif
